@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Minhas receitas</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #fff4e6ad;
+            font-size: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .borda {
+            margin: -10px auto;
+            height: 3px;
+            width: 500px;
+            background-color: black;
+        }
+
+        .receita {
+            border-bottom: 3px solid rgba(175, 175, 175, 0.781);
+            padding: 20px;
+            margin: 20px auto;
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+
+
+        .receita h2 {
+            margin-top: 0;
+        }
+
+        .receita p {
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        img {
+            width: 600px;
+            margin-bottom: 20px;
+        }
+
+        ul,
+        ol {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+
+        @media only screen and (max-width: 800px) {
+            .receita {
+                width: 60%;
+            }
+
+            img {
+                width: 450px;
+            }
+        }
+
+        nav ul {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            justify-content: right;
+            justify-items: right;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            border: #222;
+            align-items: center;
+
+        }
+
+
+
+        nav {
+            display: flex;
+            text-align: left;
+            top: 0%;
+            right: 0%;
+
+        }
+
+        nav.menu {
+            height: auto;
+            background-color: #222;
+            position: absolute;
+            margin-left: 75%;
+            display: flex;
+        }
+
+        @import url(https://fonts.googleapis.com/css?family=Raleway);
+
+        h2 {
+            vertical-align: center;
+            text-align: center;
+        }
+
+        html,
+        body {
+            margin: 0;
+            height: 100%;
+        }
+
+        * {
+            font-family: "Raleway";
+            box-sizing: border-box;
+        }
+
+        .top-nav {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #252525;
+            color: #FFF;
+            height: 50px;
+            padding: 1em;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: row;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .menu>li {
+            margin: 0 1rem;
+            overflow: hidden;
+        }
+
+        .menu-button-container {
+            display: none;
+            height: 100%;
+            width: 30px;
+            cursor: pointer;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #menu-toggle {
+            display: none;
+        }
+
+        .menu-button,
+        .menu-button::before,
+        .menu-button::after {
+            display: block;
+            background-color: #fff;
+            position: absolute;
+            height: 4px;
+            width: 30px;
+            transition: transform 400ms cubic-bezier(0.23, 1, 0.32, 1);
+            border-radius: 2px;
+        }
+
+        .menu-button::before {
+            content: '';
+            margin-top: -8px;
+        }
+
+        .menu-button::after {
+            content: '';
+            margin-top: 8px;
+        }
+
+        #menu-toggle:checked+.menu-button-container .menu-button::before {
+            margin-top: 0px;
+            transform: rotate(405deg);
+        }
+
+        #menu-toggle:checked+.menu-button-container .menu-button {
+            background: rgba(255, 255, 255, 0);
+        }
+
+        #menu-toggle:checked+.menu-button-container .menu-button::after {
+            margin-top: 0px;
+            transform: rotate(-405deg);
+        }
+
+        @media (max-width: 700px) {
+            .menu-button-container {
+                display: flex;
+            }
+
+            .menu {
+                position: absolute;
+                top: 0;
+                margin-top: 50px;
+                left: 0;
+                flex-direction: column;
+                width: 100%;
+                justify-content: center;
+                align-items: center;
+            }
+
+            #menu-toggle~.menu li {
+                height: 0;
+                margin: 0;
+                padding: 0;
+                border: 0;
+                transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
+            }
+
+            #menu-toggle:checked~.menu li {
+                border: 1px solid #333;
+                height: 2.5em;
+                padding: 0.5em;
+                transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
+            }
+
+            .menu>li {
+                display: flex;
+                justify-content: center;
+                margin: 0;
+                padding: 0.5em 0;
+                width: 100%;
+                color: white;
+                background-color: #222;
+            }
+
+            .menu>li:not(:last-child) {
+                border-bottom: 1px solid #444;
+            }
+
+        }
+
+
+        /*acaba aqui*/
+
+        li a {
+            display: block;
+            color: white;
+            text-align: right;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        li a:hover {
+            background-color: rgb(0, 0, 0);
+        }
+    </style>
+</head>
+
+
+<body>
+    <section class="top-nav">
+        <div>
+            Logo vai aqui
+        </div>
+        <input id="menu-toggle" type="checkbox" />
+        <label class='menu-button-container' for="menu-toggle">
+            <div class='menu-button'></div>
+        </label>
+        <ul class="menu">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="busca.html">Busca</a></li>
+            <li><a href="contatos.html">Contato</a></li>
+            <li><a href="login.html">Login</a></li>
+        </ul>
+    </section>
+    <h1>Nossas receitas</h1>
+    <div class="borda">
+
+    </div>
+
+    <div class="receita">
+        <img src="img/pudim.png" alt="Foto de pudim">
+        <h2>Pudim de Pão</h2>
+        <h3>Ingredientes:</h3>
+        <ul>
+            <li>4 ovos</li>
+            <li>1 lata de leite condensado</li>
+            <li>3 pães (francês)</li>
+            <li>1 colher de margarina</li>
+            <li>2 medidas de leite (medir na lata de leite condensado)</li>
+            <li>1/2 xícara de açúcar</li>
+            <li>1 xícara de açúcar para a calda</li>
+        </ul>
+        <h3>Modo de preparo:</h3>
+        <ol>
+            <li>Misture todos os ingredientes no liquidificador e bata bem.</li>
+            <li>Reserve.</li>
+            <li>Em uma forma própria para pudim derreta o açúcar para fazer a calda.</li>
+            <li>espere endurecer um pouco e coloque
+                o líquido que está no liquidificador.</li>
+            <li>Leve ao fogo por uns 35 minutos ou até você enfiar um garfo e ele sair limpo.</li>
+        </ol>
+    </div>
+
+    <div class="receita">
+        <img src="img/sensacao.png" alt="Foto de pudim">
+        <h2>Sensação na travessa</h2>
+        <h3>Ingredientes:</h3>
+        <ul>
+            <li>1 caixa/lata de leite condensado</li>
+            <li>2 caixas de creme de leite</li>
+            <li>1 pacote de suco em pó sabor morango</li>
+            <li>1 barra pequena de chocolate meio amargo ou amargo</li>
+        </ul>
+        <h3>Modo de preparo:</h3>
+        <ol>
+            <li>Bata no liquidificador o leite condensado e o creme de leite.</li>
+            <li>Em seguida acrescente o suco de morango aos poucos até se misturar completamente.</li>
+            <li>Derreta o chocolate no micro-ondas ou em fogo baixo.</li>
+            <li>Acrescente o creme de leite e misture bem.</li>
+            <li>Coloque o mousse em um refratário e coloque na geladeira enquanto prepara a ganache.</li>
+            <li>Deixe gelar por 2 horas e sirva.</li>
+            <li>Quando a ganache estiver pronta, derrame ainda morna em cima do mousse.</li>
+            <li>Se preferir decore com morangos, raspas de chocolate amargo ou folhas de hortelã.</li>
+        </ol>
+    </div>
+
+    <div class="receita">
+        <img src="img/mousse.png" alt="Foto de pudim">
+        <h2>Mousse de maracujá</h2>
+        <h3>Ingredientes:</h3>
+        <ul>
+            <li>1 lata de leite condensado</li>
+            <li>320 ml de suco de maracujá </li>
+            <li>1 lata de creme de leite sem soro</li>
+        </ul>
+        <h3>Modo de preparo:</h3>
+        <ol>
+            <li>Em um liquidificador, bata o creme de leite, o leite condensado e o suco concentrado de maracujá.</li>
+            <li>Em uma tigela, despeje a mistura e leve à geladeira por, no mínimo, 4 horas.</li>
+        </ol>
+    </div>
+
+    <div class="receita">
+        <img src="img/pave.jpg" alt="Foto de pudim">
+        <h2>Pavê de chocolate</h2>
+        <h3>Ingredientes:</h3>
+        <ul>
+            <li>1 pacote de bolacha maisena</li>
+            <li>1/2 copo de leite</li>
+            <li>1 colher (sobremesa) da chocolate em pó</li>
+            <li>2 latas de leite condensado</li>
+            <li>2 latas de leite de vaca (use a medida da lata de leite condensado)</li>
+            <li>2 colheres (sobremesa) de amido de milho</li>
+            <li>4 gemas</li>
+            <li>4 colheres de chocolate em pó</li>
+            <li>4 claras</li>
+            <li>1 lata de creme de leite sem soro
+            </li>
+            <li>4 colheres de açúcar</li>
+        </ul>
+        <h3>Modo de preparo:</h3>
+        <ol>
+            <li>Em uma tigela, misture o leite e o chocolate em pó até que esteja completamente dissolvido.</li>
+            <li>Molhe as bolachas no leite e reserve.</li>
+            <li>Em uma panela, leve todos os ingredientes ao fogo médio e misture até obter uma consistência grossa e
+                cremosa.</li>
+            <li>Repita o processo feito no creme branco.</li>
+            <li>Bata as claras em neve com o açúcar até obter um creme consistente, adicione o creme de leite e misture
+                delicadamente.</li>
+            <li>Em um refratário grande, despeje o creme branco, metade das bolachas, creme de chocolate, bolachas e
+                claras em neve.</li>
+            <li>Repita o processo até preencher todo o refratário e leve à geladeira por 40 minutos.</li>
+        </ol>
+    </div>
+
+</body>
