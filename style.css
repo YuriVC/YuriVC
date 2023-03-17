@@ -2,7 +2,6 @@ body {
     background-color: rgb(197, 197, 197);
     font: normal 15pt arial;
     background-image: url(images/background.png);
-    display: flex;
 }
 
 h1 {
