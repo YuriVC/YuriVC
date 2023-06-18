@@ -1,0 +1,184 @@
+
+ul {
+    list-style: none;
+}
+
+@import url(https://fonts.googleapis.com/css?family=Raleway);
+
+h2 {
+    text-align: center;
+}
+
+html,
+body {
+    margin: 0;
+    height: 100%;
+}
+
+* {
+    font-family: 'Raleway';
+    box-sizing: border-box;
+}
+
+
+body {
+    background-color: #fff4e6ad;
+    font-size: 20px;
+}
+
+h1 {
+    text-align: center;
+    padding-top: 40px;
+}
+
+
+.imagemlocal {
+    display: block;
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.title {
+    padding-top: 200px;
+}
+
+.row {
+    margin: 0%;
+    padding-right: 2px;
+
+}
+
+footer {
+    margin: 0%;
+}
+
+.redes {
+    justify-content: center;
+    display: flex;
+    list-style: none;
+    padding-bottom: 0px;
+    padding-top: 230px;
+    padding-left: 200px;
+    padding-right: 200px;
+    border: 0px;
+}
+
+.imagem-banner1, .imagem-banner2, .imagem-banner3 {
+    width: 400px;
+    height: 300px;
+    margin: 20px 70px;
+}
+
+@media (max-width: 320px) {
+    .imagem-banner1, .imagem-banner2 {
+        width: 267px;
+        height: 270px;
+        margin: 20px 70px;
+    }
+
+    .imagem-banner3 {
+        display: none;
+    }
+
+    .figcaption3 {
+        display: none;
+    }
+    
+    .redes {
+        justify-content: center;
+        display: flex;
+        list-style: none;
+        padding: 0%;
+        border: 0px;
+    }
+
+    div.row {
+        width: auto;
+        box-sizing: content-box;
+    }
+
+    div.col {
+        box-sizing: content-box;
+    }
+
+}
+
+@media (max-width: 1366px) {
+    .imagem-banner1, .imagem-banner2 {
+        margin: none;
+        justify-content: center;
+    }
+
+    .imagem-banner3 {
+        display: none;
+    }
+    
+    .figcaption3 {
+        display: none;
+    }
+
+    .figcaption {
+        padding-right: 20%;
+    }
+
+}
+
+
+.banners {
+    display: flex;
+    margin: 0px;
+    justify-content: center;
+}
+
+figcaption {
+    text-align: center; 
+}
+
+.redes-logos {
+    display: row;
+    width: 30px;
+    height: 30px;
+    margin: 20px;
+}
+
+div.banners {
+    width: auto;
+}
+
+
+form {
+    width: 60%;
+    margin: 0 auto;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+input[type="text"],
+input[type="email"],
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 3px solid #ccc;
+    border-radius: 10px;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+    resize: vertical;
+}
+
+input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
