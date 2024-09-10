@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Montar Grafo</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        pre { background: #f4f4f4; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Montar Grafo</h1>
+    <div id="output"></div>
+
+    <script>
+        class Graph {
+            constructor(isDirected, isWeighted) {
+                this.isDirected = isDirected;
+                this.isWeighted = isWeighted;
+                this.nodes = new Map();
+            }
+
+            addEdge(source, destination, weight = 0) {
+                if (!this.nodes.has(source)) {
+                    this.nodes.set(source, []);
+                }
+                if (this.isWeighted) {
+                    this.nodes.get(source).push({ node: destination, weight: weight });
+                } else {
+                    this.nodes.get(source).push(destination);
+                }
+                if (!this.isDirected && source !== destination) {
+                    if (!this.nodes.has(destination)) {
+                        this.nodes.set(destination, []);
+                    }
+                    if (this.isWeighted) {
+                        this.nodes.get(destination).push({ node: source, weight: weight });
+                    } else {
+                        this.nodes.get(destination).push(source);
+                    }
+                }
+            }
+
+            printGraph() {
+                let result = '';
+                for (let [node, edges] of this.nodes.entries()) {
+                    if (this.isWeighted) {
+                        result += `${node} (${edges.map(edge => `${edge.node}: ${edge.weight}`).join(', ')})\n`;
+                    } else {
+                        result += `${node} (${edges.join(' -> ')})\n`;
+                    }
+                }
+                return result;
+            }
+        }
+
+        function promptGraph() {
+            alert('Bem-vindo ao montador de grafos!');
+            
+            const type = prompt('Escolha o tipo de grafo:\n1. Direcional Não Ponderado\n2. Não Direcional Ponderado');
+            if (type !== '1' && type !== '2') {
+                alert('Opção inválida. O grafo será considerado não direcionado não ponderado.');
+                type = '1';
+            }
+
+            const isDirected = type === '1';
+            const isWeighted = type === '2';
+            const graph = new Graph(isDirected, isWeighted);
+
+            alert(`Você escolheu um grafo ${isDirected ? 'direcional' : 'não direcional'} ${isWeighted ? 'ponderado' : 'não ponderado'}.`);
+            
+            const numNodes = parseInt(prompt('Informe o número de nós do grafo:'));
+            const nodes = [];
+
+            for (let i = 0; i < numNodes; i++) {
+                nodes.push(prompt(`Informe o nome do nó ${i + 1}:`));
+            }
+
+            alert('Agora você pode adicionar arestas ao grafo. Digite "0" para parar.');
+
+            let addMoreEdges = true;
+            while (addMoreEdges) {
+                const source = prompt('Informe o nó de origem (ou 0 para parar):');
+                if (source === '0') {
+                    addMoreEdges = false;
+                    continue;
+                }
+
+                if (!nodes.includes(source)) {
+                    alert(`Nó de origem "${source}" não encontrado.`);
+                    continue;
+                }
+
+                const destination = prompt('Informe o nó de destino:');
+                if (!nodes.includes(destination)) {
+                    alert(`Nó de destino "${destination}" não encontrado.`);
+                    continue;
+                }
+
+                let weight = 0;
+                if (isWeighted) {
+                    weight = parseInt(prompt('Informe o peso da aresta:'));
+                }
+
+                graph.addEdge(source, destination, weight);
+                alert(`Aresta adicionada: ${source} -> ${destination}${isWeighted ? ` com peso ${weight}` : ''}.`);
+            }
+
+            alert('O grafo foi montado. Aqui está a representação final:');
+            return graph.printGraph();
+        }
+
+        document.getElementById('output').innerText = promptGraph();
+    </script>
+</body>
+</html>

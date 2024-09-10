@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Componentes Fortemente Conectados</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        pre { background: #f4f4f4; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Componentes Fortemente Conectados</h1>
+    <div id="output"></div>
+
+    <script>
+        class Graph {
+            constructor(isDirected) {
+                this.isDirected = isDirected;
+                this.nodes = new Map();
+            }
+
+            addEdge(source, destination) {
+                if (!this.nodes.has(source)) {
+                    this.nodes.set(source, []);
+                }
+                this.nodes.get(source).push(destination);
+                if (!this.nodes.has(destination)) {
+                    this.nodes.set(destination, []);
+                }
+            }
+
+            transpose() {
+                const transposed = new Graph(true);
+                this.nodes.forEach((_, node) => {
+                    this.nodes.get(node).forEach(neighbor => {
+                        transposed.addEdge(neighbor, node);
+                    });
+                });
+                return transposed;
+            }
+
+            dfs(node, visited, collect) {
+                visited.set(node, true);
+                collect.push(node);
+                this.nodes.get(node).forEach(neighbor => {
+                    if (!visited.has(neighbor)) {
+                        this.dfs(neighbor, visited, collect);
+                    }
+                });
+            }
+
+            getSCCs() {
+                const stack = [];
+                const visited = new Map();
+                this.nodes.forEach((_, node) => {
+                    if (!visited.has(node)) {
+                        this.dfs(node, visited, stack);
+                    }
+                });
+
+                const transposed = this.transpose();
+                const sccs = [];
+                const visitedSCC = new Map();
+
+                stack.reverse();
+                stack.forEach(node => {
+                    if (!visitedSCC.has(node)) {
+                        const scc = [];
+                        transposed.dfs(node, visitedSCC, scc);
+                        sccs.push(scc);
+                    }
+                });
+
+                return sccs;
+            }
+        }
+
+        function promptSCC() {
+            alert('Bem-vindo à identificação de componentes fortemente conectados!');
+
+            const numNodes = parseInt(prompt('Informe o número de nós do grafo:'));
+            const graph = new Graph(true); // Grafo direcionado
+
+            const nodes = [];
+            for (let i = 0; i < numNodes; i++) {
+                nodes.push(prompt(`Informe o nome do nó ${i + 1}:`));
+            }
+
+            alert('Agora, adicione arestas ao grafo. Digite "0" para parar.');
+
+            while (true) {
+                const source = prompt('Informe o nó de origem (ou 0 para parar):');
+                if (source === '0') break;
+
+                if (!nodes.includes(source)) {
+                    alert(`Nó de origem "${source}" não encontrado.`);
+                    continue;
+                }
+
+                const destination = prompt('Informe o nó de destino:');
+                if (!nodes.includes(destination)) {
+                    alert(`Nó de destino "${destination}" não encontrado.`);
+                    continue;
+                }
+
+                graph.addEdge(source, destination);
+                alert(`Aresta adicionada: ${source} -> ${destination}.`);
+            }
+
+            const sccs = graph.getSCCs();
+
+            alert('Os componentes fortemente conectados são:');
+            return sccs.map(scc => `{ ${scc.join(', ')} }`).join('\n');
+        }
+
+        document.getElementById('output').innerText = promptSCC();
+    </script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algoritmo A*</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 15px;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+        a:hover {
+            color: #0056b3;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Algoritmo A*</h1>
+        <div id="output"></div>
+    </div>
+
+    <script>
+        class AStarGraph {
+            constructor() {
+                this.nodes = new Map();
+                this.heuristics = new Map();
+            }
+
+            
+            addEdge(source, destination, weight) {
+                if (!this.nodes.has(source)) this.nodes.set(source, []);
+                if (!this.nodes.has(destination)) this.nodes.set(destination, []);
+                this.nodes.get(source).push({ node: destination, weight });
+                this.nodes.get(destination).push({ node: source, weight }); 
+            }
+
+            setHeuristic(node, heuristic) {
+                this.heuristics.set(node, heuristic);
+            }
+
+            // algoritmo A*
+            aStar(start, end) {
+                const openSet = [start];
+                const closedSet = new Set();
+                const gScores = new Map(); 
+                const fScores = new Map();
+                const previous = new Map(); 
+
+                this.nodes.forEach((_, node) => {
+                    gScores.set(node, Infinity);
+                    fScores.set(node, Infinity);
+                });
+
+                gScores.set(start, 0);
+                fScores.set(start, this.heuristics.get(start));
+
+                while (openSet.length > 0) {
+                    openSet.sort((a, b) => fScores.get(a) - fScores.get(b));
+                    const current = openSet.shift();
+
+                    if (current === end) {
+                        
+                        const path = [];
+                        let temp = end;
+                        while (temp) {
+                            path.unshift(temp);
+                            temp = previous.get(temp);
+                        }
+                        return { path, distance: gScores.get(end) };
+                    }
+
+                    closedSet.add(current);
+
+                    this.nodes.get(current).forEach(neighbor => {
+                        if (closedSet.has(neighbor.node)) return;
+
+                        const tentativeGScore = gScores.get(current) + neighbor.weight;
+
+                        if (!openSet.includes(neighbor.node)) openSet.push(neighbor.node);
+                        else if (tentativeGScore >= gScores.get(neighbor.node)) return;
+                        previous.set(neighbor.node, current);
+                        gScores.set(neighbor.node, tentativeGScore);
+                        fScores.set(neighbor.node, tentativeGScore + this.heuristics.get(neighbor.node));
+                    });
+                }
+
+                return { path: [], distance: Infinity }; // retorna infinito se n encontrar caminho
+            }
+        }
+
+        function promptAStar() {
+            alert('Bem-vindo ao Algoritmo A*!');
+
+            const graph = new AStarGraph();
+            const numNodes = parseInt(prompt('Informe o número de nós do grafo:'));
+
+            const nodes = [];
+            for (let i = 0; i < numNodes; i++) {
+                nodes.push(prompt(`Informe o nome do nó ${i + 1}:`));
+            }
+
+            alert('Agora, adicione as arestas ao grafo. Digite "0" para parar.');
+
+            while (true) {
+                const source = prompt('Informe o nó de origem (ou 0 para parar):');
+                if (source === '0') break;
+
+                const destination = prompt('Informe o nó de destino:');
+                const weight = parseInt(prompt('Informe o peso da aresta:'));
+                graph.addEdge(source, destination, weight);
+            }
+
+            //mds q isso
+            nodes.forEach(node => {
+                const heuristic = parseInt(prompt(`Informe a heurística (distância ao nó final) para o nó ${node}:`));
+                graph.setHeuristic(node, heuristic);
+            });
+
+            const start = prompt('Informe o nó inicial:');
+            const end = prompt('Informe o nó final:');
+            const result = graph.aStar(start, end);
+
+            alert(`O caminho mínimo entre ${start} e ${end} é: ${result.path.join(' -> ')} com distância total de ${result.distance}`);
+            return `Caminho: ${result.path.join(' -> ')}\nDistância total: ${result.distance}`;
+        }
+
+        document.getElementById('output').innerText = promptAStar();
+    </script>
+</body>
+</html>

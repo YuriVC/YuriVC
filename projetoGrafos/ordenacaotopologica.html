@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordenação Topológica</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        pre { background: #f4f4f4; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Ordenação Topológica e Componentes Fortemente Conectados</h1>
+    <div id="output"></div>
+
+    <script>
+        class Graph {
+            constructor(isDirected) {
+                this.isDirected = isDirected;
+                this.nodes = new Map();
+            }
+
+            addEdge(source, destination) {
+                if (!this.nodes.has(source)) {
+                    this.nodes.set(source, []);
+                }
+                this.nodes.get(source).push(destination);
+                if (!this.nodes.has(destination)) {
+                    this.nodes.set(destination, []);
+                }
+            }
+
+            // Ordenação Topológica usando DFS
+            topologicalSort() {
+                const visited = new Map();
+                const stack = [];
+                const order = [];
+                const discovery = new Map();
+                const finish = new Map();
+                let time = 0;
+
+                const dfs = (node) => {
+                    visited.set(node, true);
+                    discovery.set(node, ++time);
+                    this.nodes.get(node).forEach(neighbor => {
+                        if (!visited.has(neighbor)) {
+                            dfs(neighbor);
+                        }
+                    });
+                    finish.set(node, ++time);
+                    stack.push(node);
+                };
+
+                this.nodes.forEach((_, node) => {
+                    if (!visited.has(node)) {
+                        dfs(node);
+                    }
+                });
+
+                stack.reverse();
+                stack.forEach(node => order.push(node));
+
+                return { order, discovery, finish };
+            }
+        }
+
+        function promptTopologicalSort() {
+            alert('Bem-vindo à ordenação topológica!');
+
+            const numNodes = parseInt(prompt('Informe o número de nós do grafo:'));
+            const graph = new Graph(true); // Grafo direcionado
+
+            const nodes = [];
+            for (let i = 0; i < numNodes; i++) {
+                nodes.push(prompt(`Informe o nome do nó ${i + 1}:`));
+            }
+
+            alert('Agora, adicione arestas ao grafo. Digite "0" para parar.');
+
+            while (true) {
+                const source = prompt('Informe o nó de origem (ou 0 para parar):');
+                if (source === '0') break;
+
+                if (!nodes.includes(source)) {
+                    alert(`Nó de origem "${source}" não encontrado.`);
+                    continue;
+                }
+
+                const destination = prompt('Informe o nó de destino:');
+                if (!nodes.includes(destination)) {
+                    alert(`Nó de destino "${destination}" não encontrado.`);
+                    continue;
+                }
+
+                graph.addEdge(source, destination);
+                alert(`Aresta adicionada: ${source} -> ${destination}.`);
+            }
+
+            const { order, discovery, finish } = graph.topologicalSort();
+
+            alert('A ordenação topológica do grafo é:\n' + order.join(' -> '));
+            let result = 'Ordem de descoberta e finalização:\n';
+            order.forEach(node => {
+                result += `${node} (${discovery.get(node)}/${finish.get(node)})\n`;
+            });
+            return result;
+        }
+
+        document.getElementById('output').innerText = promptTopologicalSort();
+    </script>
+</body>
+</html>

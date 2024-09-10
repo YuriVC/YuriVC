@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dijkstra*</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        pre { background: #f4f4f4; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Algoritmo de Dijkstra</h1>
+    <div id="output"></div>
+
+    <script>
+        class Graph {
+            constructor() {
+                this.nodes = new Map();
+            }
+
+            addEdge(source, destination, weight) {
+                if (!this.nodes.has(source)) this.nodes.set(source, []);
+                if (!this.nodes.has(destination)) this.nodes.set(destination, []);
+
+                this.nodes.get(source).push({ node: destination, weight });
+                this.nodes.get(destination).push({ node: source, weight });
+            }
+
+            // Algoritmo de Dijkstra
+            dijkstra(start, end) {
+                const distances = {};
+                const previous = {};
+                const pq = new Set(this.nodes.keys());
+
+                this.nodes.forEach((_, node) => {
+                    distances[node] = Infinity;
+                    previous[node] = null;
+                });
+
+                distances[start] = 0;
+
+                while (pq.size) {
+                    let closestNode = null;
+                    pq.forEach(node => {
+                        if (closestNode === null || distances[node] < distances[closestNode]) {
+                            closestNode = node;
+                        }
+                    });
+
+                    pq.delete(closestNode);
+
+                    if (closestNode === end) {
+                        const path = [];
+                        let current = end;
+                        while (current) {
+                            path.unshift(current);
+                            current = previous[current];
+                        }
+                        return { path, distance: distances[end] };
+                    }
+
+                    this.nodes.get(closestNode).forEach(neighbor => {
+                        const alt = distances[closestNode] + neighbor.weight;
+                        if (alt < distances[neighbor.node]) {
+                            distances[neighbor.node] = alt;
+                            previous[neighbor.node] = closestNode;
+                        }
+                    });
+                }
+
+                return { path: [], distance: Infinity };
+            }
+        }
+
+        function promptDijkstra() {
+            alert('Bem-vindo ao Algoritmo de Dijkstra!');
+
+            const numNodes = parseInt(prompt('Informe o número de nós do grafo:'));
+            const graph = new Graph();
+
+            const nodes = [];
+            for (let i = 0; i < numNodes; i++) {
+                nodes.push(prompt(`Informe o nome do nó ${i + 1}:`));
+            }
+
+            alert('Agora, adicione as arestas ao grafo. Digite "0" para parar.');
+
+            while (true) {
+                const source = prompt('Informe o nó de origem (ou 0 para parar):');
+                if (source === '0') break;
+
+                if (!nodes.includes(source)) {
+                    alert(`Nó de origem "${source}" não encontrado.`);
+                    continue;
+                }
+
+                const destination = prompt('Informe o nó de destino:');
+                if (!nodes.includes(destination)) {
+                    alert(`Nó de destino "${destination}" não encontrado.`);
+                    continue;
+                }
+
+                const weight = parseInt(prompt('Informe o peso da aresta:'));
+                graph.addEdge(source, destination, weight);
+                alert(`Aresta adicionada: ${source} -> ${destination} com peso ${weight}.`);
+            }
+
+            const start = prompt('Informe o nó inicial:');
+            const end = prompt('Informe o nó final:');
+            const result = graph.dijkstra(start, end);
+
+            alert(`O caminho mínimo entre ${start} e ${end} é: ${result.path.join(' -> ')} com distância total de ${result.distance}`);
+            return `Caminho: ${result.path.join(' -> ')}\nDistância total: ${result.distance}`;
+        }
+
+        document.getElementById('output').innerText = promptDijkstra();
+    </script>
+</body>
+</html>
