@@ -1,0 +1,4 @@
+Ana 8,23 aprovado
+﻿Joao 6,33 aprovado
+Maria 6,98 aprovado
+Carlos 4,65 reprovado
